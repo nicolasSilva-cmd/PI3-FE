@@ -1,0 +1,61 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f6f8fa;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+form input, form button {
+  display: block;
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.org-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background-color: #fafafa;
+}
+
+.org-card h3 {
+  margin-top: 0;
+}
+
+.cancelar-reserva {
+  margin-top: 10px;
+}
+
+.clientes-container {
+  margin-top: 15px;
+  background: #f0f4f8;
+  border: 1px dashed #ccc;
+  padding: 10px;
+  border-radius: 8px;
+}
