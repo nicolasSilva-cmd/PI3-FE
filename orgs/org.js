@@ -60,7 +60,7 @@ async function cadastrarOrg(event) {
     }
 
     alert("Organização cadastrada com sucesso!");
-    document.getElementById("formNovaOrg").reset();
+    document.getElementById("orgForm").reset();
     listarOrganizacoes();
   } catch (error) {
     alert("Erro ao cadastrar: " + error.message);
@@ -114,63 +114,57 @@ async function cancelarReserva(orgId) {
 }
 
 // RENDERIZAR ORGS
-function renderizarOrgs(orgs) {
-  const container = document.getElementById("orgList");
-  container.innerHTML = "";
-
-  if (!orgs.length) {
-    container.innerHTML = "<p>Nenhuma organização encontrada.</p>";
-    return;
-  }
-
-  orgs.forEach(org => {
+function renderizarOrgs(organizações) {
+  orgList.innerHTML = "";
+  organizações.forEach(org => {
     const card = document.createElement("div");
     card.className = "org-card";
-
-    let clientesHTML = "";
-    if (org.clientId && org.clientId.length > 0) {
-      clientesHTML = "<h4>Clientes:</h4><ul>";
-      org.clientId.forEach(cliente => {
-        clientesHTML += `<li>ID: ${cliente.clienteId} | Código: ${cliente.codAgendamento} | Status: ${cliente.status}</li>`;
-      });
-      clientesHTML += "</ul>";
-    } else {
-      clientesHTML = "<p><em>Sem clientes reservados.</em></p>";
-    }
-
     card.innerHTML = `
-  <h3>${org.nome}</h3>
-  <p><strong>Email:</strong> ${org.email}</p>
-  <p><strong>Agenda:</strong> ${org.agenda}</p>
-  <p><strong>Vagas Disponíveis:</strong> ${org.vagasDisponiveis}</p>
-  <p><strong>Vagas Reservadas:</strong> ${org.vagasReservadas}</p>
-  
-  <button onclick="fazerReserva(${org.orgId})">Reservar</button>
-  <div class="cancelar-reserva">
-    <input type="number" placeholder="ID do Cliente" id="cliente-${org.orgId}" />
-    <button onclick="cancelarReserva(${org.orgId})">Cancelar Reserva</button>
-  </div>
+      <h3>${org.nome}</h3>
+      <p><strong>Email:</strong> ${org.email}</p>
+      <p><strong>Agenda:</strong> ${org.agenda}</p>
+      <p><strong>Vagas Disponíveis:</strong> ${org.vagasDisponiveis}</p>
+      <p><strong>Vagas Reservadas:</strong> ${org.vagasReservadas}</p>
 
-  <button onclick="buscarClientesPorOrg(${org.orgId})">Ver Clientes</button>
-  <div id="clientes-${org.orgId}" class="clientes-container"></div>
-`;container.appendChild(card);
+      <button onclick="fazerReserva(${org.orgId})">
+        <i data-lucide="calendar-plus"></i> Reservar
+      </button>
+
+      <div class="cancelar-reserva">
+        <input type="number" placeholder="ID do Cliente" id="cliente-${org.orgId}" />
+        <button onclick="cancelarReserva(${org.orgId})">
+          <i data-lucide="calendar-x"></i> Cancelar Reserva
+        </button>
+      </div>
+
+      <button class="collapsible" onclick="buscarClientesPorOrg(${org.orgId})">
+        <i data-lucide="users"></i> Ver Clientes
+      </button>
+      <div id="clientes-${org.orgId}" class="clientes-container" style="display: none;"></div>
+    `;
+    orgList.appendChild(card);
   });
+  lucide.createIcons(); // Atualiza ícones após renderização
 }
 
 
+
 function buscarClientesPorOrg(orgId) {
+  const div = document.getElementById(`clientes-${orgId}`);
+  const isVisible = div.style.display === "block";
+  if (isVisible) {
+    div.style.display = "none";
+    return;
+  }
+
   fetch(`http://localhost:8080/cliente/${orgId}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Erro ao buscar clientes.");
-      }
-      return response.json();
-    })
+    .then(response => response.json())
     .then(clientes => {
       exibirClientes(orgId, clientes);
+      div.style.display = "block";
     })
     .catch(error => {
-      console.error("Erro:", error);
+      console.error("Erro ao buscar clientes:", error);
       alert("Erro ao buscar os clientes da organização.");
     });
 }
