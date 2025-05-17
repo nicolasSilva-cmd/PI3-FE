@@ -59,3 +59,20 @@ button:hover {
   padding: 10px;
   border-radius: 8px;
 }
+
+button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.collapsible {
+  background-color: #6c757d;
+  color: white;
+}
+
+.collapsible:hover {
+  background-color: #5a6268;
+}
+
